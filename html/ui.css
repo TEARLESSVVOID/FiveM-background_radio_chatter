@@ -1,0 +1,103 @@
+/*
+ * ============================================================
+ * Background Radio Chatter - NUI 菜单样式 / NUI menu styles
+ * 颜色规格取自原 LSPDFR 面板的 ARGB 值 / colors taken from the
+ * original LSPDFR panel's ARGB values:
+ *   外边框 border      rgb(5,79,122)
+ *   面板背景 background rgb(8,14,24)
+ *   标题栏 header      rgb(12,88,140)
+ *   分隔线 divider     rgb(83,196,255)
+ *   选中行 selected     rgb(28,112,166)
+ *   底部区 footer      rgb(12,29,43)
+ *   在线色 online       rgb(170,230,255)
+ *   离线色 offline      rgb(255,205,130)
+ *   取值色 value        rgb(113,206,255) / 选中 rgb(232,249,255)
+ * ============================================================
+ */
+
+:root {
+    --row-height: 34px;      /* 行高（1080p 下对应原版 max(23, h*0.031)）/ row height */
+    --header-height: 71px;   /* 标题区高度 row*2.1 / header height */
+    --footer-height: 71px;   /* 底部区高度 row*2.1 / footer height */
+    --panel-width: 450px;    /* 面板宽度 / panel width */
+    --panel-top: 16vh;       /* 距顶部 16%（同原版 h*0.16）/ top offset */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: transparent;
+    /* 中文字体回退，保证菜单列表汉化后清晰渲染 / CJK fallbacks for crisp Chinese text */
+    font-family: Arial, "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+    user-select: none;
+}
+
+/* 面板停靠位置 / panel dock positions（left/right 边距 2.5vw，同原版 w*0.025） */
+#panel { position: absolute; top: var(--panel-top); }
+#panel.pos-left   { left: 2.5vw; }
+#panel.pos-right  { right: 2.5vw; }
+#panel.pos-center { left: 50%; transform: translateX(-50%); }
+
+#panel.hidden { display: none; }
+
+/* 外边框：3px rgb(5,79,122)，同原版 3px 描边 / 3px outer border */
+#panel-border {
+    width: var(--panel-width);
+    border: 3px solid rgb(5, 79, 122);
+    background: rgba(8, 14, 24, 0.92);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55);
+}
+
+/* 标题区 / header */
+#header {
+    height: var(--header-height);
+    background: rgb(12, 88, 140);
+    padding: 10px 16px 0 16px;
+}
+#title-row { display: flex; align-items: center; gap: 10px; }
+#title-text { color: #ffffff; font-size: 22px; font-weight: bold; letter-spacing: 1px; }
+#status-line { margin-top: 8px; font-size: 13px; letter-spacing: 0.5px; }
+/* 状态行颜色由 JS 切换 / status colors toggled from JS */
+#status-line.online  { color: rgb(170, 230, 255); }
+#status-line.offline { color: rgb(255, 205, 130); }
+
+/* 标题分隔线：3px 亮蓝 / 3px bright divider */
+#header-divider { height: 3px; background: rgb(83, 196, 255); }
+
+/* 菜单行 / item rows */
+.item {
+    position: relative;
+    height: var(--row-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px 0 13px;
+    /* 纯键盘操作，不响应鼠标 / keyboard-only, no mouse interaction */
+    pointer-events: none;
+}
+/* 选中行高亮条 / highlight bar for the selected row */
+.item.selected { background: rgb(28, 112, 166); }
+.item .label { font-size: 15px; color: rgba(220, 231, 240, 0.8); white-space: nowrap; }
+.item.selected .label { color: #ffffff; font-weight: bold; }
+.item .value {
+    font-size: 15px;
+    color: rgb(113, 206, 255);
+    width: 130px;                 /* 右对齐取值区宽 130px，同原版裁剪区 / right value area */
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.item.selected .value { color: rgb(232, 249, 255); }
+
+/* 底部按键说明 / footer hints */
+#footer {
+    height: var(--footer-height);
+    background: rgb(12, 29, 43);
+    padding: 8px 14px 0 14px;
+}
+#footer .hint      { font-size: 12px; color: rgba(214, 227, 239, 0.75); line-height: 34px; }
+#footer .hint.dim  { color: rgba(178, 204, 223, 0.5); }

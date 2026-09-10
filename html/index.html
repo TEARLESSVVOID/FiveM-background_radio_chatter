@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--
+  设置菜单页面 / Settings menu page
+  视觉规格复刻原 LSPDFR 菜单面板 / Visual spec mirrors the original LSPDFR menu panel
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Background Radio Chatter</title>
+    <link rel="stylesheet" href="ui.css" />
+</head>
+<body>
+    <!-- 菜单面板 / menu panel（停靠位置由 pos-* 类控制 / dock position via pos-* classes） -->
+    <div id="panel" class="pos-left hidden">
+        <!-- 外边框层 / outer border layer -->
+        <div id="panel-border">
+            <!-- 标题区 / header -->
+            <div id="header">
+                <div id="title-row">
+                    <!-- 电台 SVG 图标 / radio SVG icon -->
+                    <svg id="title-icon" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+                        <rect x="2" y="8" width="20" height="13" rx="2" fill="none" stroke="#53c4ff" stroke-width="2"/>
+                        <path d="M7 8 L17 3" stroke="#53c4ff" stroke-width="2" stroke-linecap="round" fill="none"/>
+                        <circle cx="8.5" cy="14.5" r="3" fill="none" stroke="#53c4ff" stroke-width="2"/>
+                        <line x1="14" y1="12.5" x2="19" y2="12.5" stroke="#53c4ff" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="14" y1="16.5" x2="19" y2="16.5" stroke="#53c4ff" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span id="title-text">BACKGROUND RADIO CHATTER</span>
+                </div>
+                <!-- 状态行：ONLINE/OFFLINE + WAV 数量 / status line -->
+                <div id="status-line">RADIO CONTROL PANEL &bull; OFFLINE &bull; 0 WAVS</div>
+            </div>
+            <!-- 标题分隔线 / header divider -->
+            <div id="header-divider"></div>
+            <!-- 菜单行容器（由 ui.js 生成）/ item rows (built by ui.js) -->
+            <div id="items"></div>
+            <!-- 底部按键说明 / footer key hints -->
+            <div id="footer">
+                <div class="hint">&uarr;&darr;&nbsp;选择&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&larr;&rarr;&nbsp;修改</div>
+                <div class="hint dim">回车&nbsp;确认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;退格/ESC&nbsp;保存关闭</div>
+            </div>
+        </div>
+    </div>
+    <script src="ui.js"></script>
+</body>
+</html>

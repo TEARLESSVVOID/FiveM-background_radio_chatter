@@ -1,0 +1,13 @@
+# OS junk / 系统垃圾文件
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Editor / 编辑器
+.vscode/
+.idea/
+*.swp
+
+# Logs & temp / 日志与临时文件
+*.log
+*.tmp
