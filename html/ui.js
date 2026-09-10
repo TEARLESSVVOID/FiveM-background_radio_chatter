@@ -40,11 +40,12 @@ function dbg() {
 // ===== 菜单部分（纯显示）/ Menu section (display only) =====
 
 // 菜单项文字（中文；索引与 main.lua 的 values 数组一一对应）
-// 精简为 7 项：调度类设置（间隔/长静默/防重复）由服务器统一调度，玩家修改无效，已移除。
+// 8 项：调度类设置（间隔/长静默/防重复）由服务器统一调度，玩家修改无效，已移除。
 // Item captions (Chinese; indexes match the values array in main.lua)
-// Trimmed to 7: scheduling settings (delays/silence/repeat) are server-side only.
+// 8 items: scheduling settings (delays/silence/repeat) are server-side only, hence removed.
 var ITEMS = [
     '电台开关',
+    '自启动',
     '音量',
     '音量均衡',
     '菜单位置',

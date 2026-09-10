@@ -23,7 +23,8 @@ Config.Commands = {
 -- Note: everything here is a per-player setting editable in the menu;
 --       playback rhythm lives in Config.Schedule below (server-only).
 Config.Defaults = {
-    Enabled          = false,  -- 资源启动后是否自动开启 / auto-start when the resource loads
+    AutoStart        = false,  -- 玩家进服时是否自动开台（可在菜单"自启动"项修改并持久化）
+                               -- auto-enable the radio when the player joins (editable & persisted)
     Notifications    = true,   -- 屏幕左上角通知 / GTA feed notifications
     Volume           = 0.35,   -- 主音量 0.0 ~ 1.0 / master volume 0..1
     NormalizeVolume  = true,   -- 均衡各 WAV 响度 / normalize WAV loudness

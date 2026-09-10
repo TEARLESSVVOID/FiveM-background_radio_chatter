@@ -9,7 +9,7 @@
 [![LSPDFR Port](https://img.shields.io/badge/ported%20from-LSPDFR%20Plugin-9cf)](https://www.lcpdfr.com/downloads/gta5mods/scripts/55334-background-radio-chatter/)
 [![License](https://img.shields.io/badge/code%20license-MIT-green?logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Audio License](https://img.shields.io/badge/audio%20license-CC%20BY%203.0%20US-lightgrey?logo=creativecommons&logoColor=black)](#-credits)
-[![Version](https://img.shields.io/badge/version-1.0.0-yellow)](https://github.com/TEARLESSVVOID/FiveM-background_radio_chatter/releases)
+[![Version](https://img.shields.io/badge/version-1.1.0-yellow)](https://github.com/TEARLESSVVOID/FiveM-background_radio_chatter/releases)
 
 **English** | [简体中文](README.zh-CN.md)
 
@@ -76,7 +76,7 @@ This resource is a **faithful reverse-engineered port** of the LSPDFR plugin [*B
 ### Player Experience
 - **219 authentic WAV chatter clips** bundled out of the box
 - Keyboard-only settings menu (NUI) that **never captures mouse or focus** — movement, camera and chat stay live
-- All settings persisted per-player via KVP
+- All settings persisted per-player via KVP — including the **Auto Start** preference, so your configuration survives relogs
 - Loudness normalization option to equalize clip volumes
 
 ---
@@ -107,7 +107,7 @@ This resource is a **faithful reverse-engineered port** of the LSPDFR plugin [*B
 
 | Command | Description |
 |---|---|
-| `/Sncradio` | Open the settings menu (the radio on/off switch is the first item) |
+| `/Sncradio` | Open the settings menu (session radio switch, auto-start, volume, …) |
 | `/brcdebug` | Print full diagnostics for every link in the audio chain |
 
 **Menu controls** (keyboard only, game input never captured):
@@ -121,6 +121,8 @@ This resource is a **faithful reverse-engineered port** of the LSPDFR plugin [*B
 
 Menu position can be docked **Left / Center / Right**, and the player keeps full control of their character while the menu is open.
 
+> 💡 **Auto Start** — enable it once and the radio turns itself on every time you join. The setting is persisted per-player (KVP), so it survives relogs and server restarts.
+
 ---
 
 ## ⚙️ Configuration
@@ -131,7 +133,7 @@ Everything lives in [`config.lua`](config.lua). Key sections:
 
 | Key | Default | Description |
 |---|---|---|
-| `Enabled` | `false` | Auto-start the radio when the resource loads |
+| `AutoStart` | `false` | Auto-enable the radio when the player joins (editable in the menu, persisted per-player) |
 | `Notifications` | `true` | GTA feed notifications |
 | `Volume` | `0.35` | Master volume `0.0–1.0` |
 | `NormalizeVolume` | `true` | Equalize WAV loudness |

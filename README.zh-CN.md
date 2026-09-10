@@ -9,7 +9,7 @@
 [![LSPDFR 移植](https://img.shields.io/badge/ported%20from-LSPDFR%20Plugin-9cf)](https://www.lcpdfr.com/downloads/gta5mods/scripts/55334-background-radio-chatter/)
 [![License](https://img.shields.io/badge/code%20license-MIT-green?logo=opensourceinitiative&logoColor=white)](LICENSE)
 [![Audio License](https://img.shields.io/badge/audio%20license-CC%20BY%203.0%20US-lightgrey?logo=creativecommons&logoColor=black)](#-致谢)
-[![Version](https://img.shields.io/badge/version-1.0.0-yellow)](https://github.com/TEARLESSVVOID/FiveM-background_radio_chatter/releases)
+[![Version](https://img.shields.io/badge/version-1.1.0-yellow)](https://github.com/TEARLESSVVOID/FiveM-background_radio_chatter/releases)
 
 [English](README.md) | **简体中文**
 
@@ -76,7 +76,7 @@
 ### 玩家体验
 - 内置 **219 条真实 WAV 电台杂谈**
 - 纯键盘设置菜单（NUI），**全程不捕获鼠标与焦点**——移动、视角、聊天一切照常
-- 所有设置通过 KVP 按玩家持久化
+- 所有设置通过 KVP 按玩家持久化——包括**自启动**偏好，重连配置不丢失
 - 音量均衡选项，拉平各条录音的响度差异
 
 ---
@@ -107,7 +107,7 @@
 
 | 指令 | 说明 |
 |---|---|
-| `/Sncradio` | 打开设置菜单（电台开关就是菜单第一项） |
+| `/Sncradio` | 打开设置菜单（本次会话电台开关、自启动、音量等） |
 | `/brcdebug` | 打印音频链路每一跳的完整诊断信息 |
 
 **菜单操作**（纯键盘，不占用游戏输入）：
@@ -121,6 +121,8 @@
 
 菜单可停靠在**左侧 / 居中 / 右侧**，菜单打开期间玩家依然可以自由移动角色。
 
+> 💡 **自启动** —— 开启一次后，每次进服电台自动打开。该设置按玩家持久化（KVP），重连、重启服务器都不会丢失。
+
 ---
 
 ## ⚙️ 配置说明
@@ -131,7 +133,7 @@
 
 | 键 | 默认值 | 说明 |
 |---|---|---|
-| `Enabled` | `false` | 资源加载后自动开启电台 |
+| `AutoStart` | `false` | 玩家进服时自动开台（可在菜单"自启动"修改，按玩家持久化） |
 | `Notifications` | `true` | GTA 屏幕通知 |
 | `Volume` | `0.35` | 主音量 `0.0–1.0` |
 | `NormalizeVolume` | `true` | 均衡各 WAV 响度 |

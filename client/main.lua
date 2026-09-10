@@ -34,10 +34,13 @@ local lastVolumes    = {}         -- 最近一次广播携带的音量数组 [{i
 local lastClip       = nil        -- 上一条本地测试播放的片段 / last locally test-played clip
 local lastClipVol    = nil        -- 最后下发给 NUI 的声源列表（诊断用）/ last emitter list sent to NUI (debug)
 
--- 菜单项总数（0~6）/ total menu items (0..6)
+-- 菜单项总数（0~7）/ total menu items (0..7)
 -- 说明：同步播放由服务器统一调度，间隔/长静默/防重复等调度类设置已移除（改了也无法生效）。
+--       "自启动"决定玩家下次进服是否自动开台；"Radio"只控制本次会话是否发声。
 -- Note: playback is server-scheduled; delay/silence/repeat settings were removed (per-player edits cannot apply).
-local MENU_ITEMS = 7
+--       "Auto Start" controls whether the radio enables itself on the NEXT join;
+--       "Radio" toggles emission for the current session only.
+local MENU_ITEMS = 8
 
 local AudioFiles = AudioFiles or {} -- 来自 audio_files.lua 的清单 / manifest from audio_files.lua
 
@@ -82,7 +85,7 @@ end
 -- Trimmed: only the settings still editable in the menu + the notification toggle.
 local function LoadSettings()
     local merged = {
-        Enabled         = Config.Defaults.Enabled,
+        AutoStart       = Config.Defaults.AutoStart,
         Notifications   = Config.Defaults.Notifications,
         Volume          = Config.Defaults.Volume,
         NormalizeVolume = Config.Defaults.NormalizeVolume,
@@ -94,6 +97,12 @@ local function LoadSettings()
         local ok, saved = pcall(json.decode, raw)
         if ok and type(saved) == 'table' then
             -- 只接受类型正确的字段，坏数据回退默认值 / only accept well-typed fields
+            -- 兼容旧版数据：老 KVP 里的 Enabled 字段迁移为 AutoStart / migrate legacy Enabled -> AutoStart
+            local savedAutoStart = saved.AutoStart
+            if savedAutoStart == nil and type(saved.Enabled) == 'boolean' then
+                savedAutoStart = saved.Enabled
+            end
+            if type(savedAutoStart) == 'boolean' then merged.AutoStart = savedAutoStart end
             if type(saved.Notifications) == 'boolean' then merged.Notifications = saved.Notifications end
             if type(saved.Volume) == 'number' then merged.Volume = saved.Volume end
             if type(saved.NormalizeVolume) == 'boolean' then merged.NormalizeVolume = saved.NormalizeVolume end
@@ -111,18 +120,26 @@ local function LoadSettings()
         merged.MenuPosition = 'Left'
     end
 
-    Dbg(('LoadSettings: volume=%.2f normalize=%s pos=%s notif=%s savedEnabled=%s')
+    Dbg(('LoadSettings: volume=%.2f normalize=%s pos=%s notif=%s autostart=%s')
         :format(merged.Volume, tostring(merged.NormalizeVolume), merged.MenuPosition,
-                tostring(merged.Notifications), tostring(merged.Enabled)))
+                tostring(merged.Notifications), tostring(merged.AutoStart)))
     return merged
 end
 
 -- 保存到客户端 KVP（对应 RadioSettings.Save）/ persist to client KVP (mirrors RadioSettings.Save)
+-- 自启动是持久化偏好；本次会话的开关状态（radioEnabled）不写入，避免"临时关台"被记住
+-- AutoStart is the persisted preference; the session toggle (radioEnabled) is NOT saved,
+-- so a temporary "radio off" is not remembered across relogs.
 local function SaveSettings()
-    settings.Enabled = radioEnabled
-    SetResourceKvp(Config.SettingsKey, json.encode(settings))
-    Dbg(('SaveSettings: enabled=%s volume=%.2f pos=%s')
-        :format(tostring(radioEnabled), settings.Volume, settings.MenuPosition))
+    SetResourceKvp(Config.SettingsKey, json.encode({
+        AutoStart       = settings.AutoStart,
+        Notifications   = settings.Notifications,
+        Volume          = settings.Volume,
+        NormalizeVolume = settings.NormalizeVolume,
+        MenuPosition    = settings.MenuPosition,
+    }))
+    Dbg(('SaveSettings: autostart=%s volume=%.2f pos=%s')
+        :format(tostring(settings.AutoStart), settings.Volume, settings.MenuPosition))
 end
 
 -- ===== 时钟校准（全服同步的基石）/ Clock calibration (basis of the sync) =====
@@ -402,9 +419,9 @@ local function SelectClip()
 end
 
 -- ===== 菜单数值逻辑（对应 ChangeMenuValue / ActivateMenuItem）=====
--- 菜单项索引（精简后 7 项）/ Menu item indexes (trimmed to 7):
--- 0 Radio | 1 Volume | 2 Normalize | 3 Menu position
--- 4 Play test | 5 Reset | 6 Save & close
+-- 菜单项索引（8 项）/ Menu item indexes (8 items):
+-- 0 Radio | 1 Auto Start | 2 Volume | 3 Normalize | 4 Menu position
+-- 5 Play test | 6 Reset | 7 Save & close
 -- 说明：调度类设置（间隔/长静默/防重复）已移除——同步播放由服务器统一调度，
 --       玩家本地修改无法影响全服序列，属于无效项。
 -- Note: scheduling settings were removed — playback is server-scheduled, so
@@ -425,15 +442,25 @@ local function AdjustSetting(index, delta)
             Notify('~g~RADIO ONLINE~s~ • ' .. #AudioFiles .. ' WAVs • Volume ' .. VolumePercent() .. '%')
         end
     elseif index == 1 then
+        -- 自启动开关：决定下次进服是否自动开台（持久化到 KVP，重启/重连不丢失）
+        -- Auto Start toggle: radio enables itself on the NEXT join (persisted via KVP)
+        settings.AutoStart = not settings.AutoStart
+        Dbg('menu: AutoStart -> ' .. tostring(settings.AutoStart))
+        if settings.AutoStart then
+            Notify('~g~AUTO START ON~s~ Radio will enable itself next time you join.')
+        else
+            Notify('~y~AUTO START OFF~s~ Radio stays off when you join.')
+        end
+    elseif index == 2 then
         -- 音量 ±5%，本机声源实时生效 / volume ±5%, applied live to own emitter
         settings.Volume = Round2(Clamp(settings.Volume + delta * 0.05, 0.0, 1.0))
         Dbg(('menu: Volume -> %.2f (sent live to NUI)'):format(settings.Volume))
         -- 关台状态下改音量不得解除静音 / changing volume while OFF must not unmute
         SendNUIMessage({ type = 'volume', volume = radioEnabled and settings.Volume or 0 })
-    elseif index == 2 then
+    elseif index == 3 then
         settings.NormalizeVolume = not settings.NormalizeVolume
         Dbg('menu: NormalizeVolume -> ' .. tostring(settings.NormalizeVolume))
-    elseif index == 3 then
+    elseif index == 4 then
         -- 菜单位置循环 / cycle dock position
         local nextPosition = { Left = 'Center', Center = 'Right', Right = 'Left' }
         local prevPosition = { Left = 'Right', Center = 'Left', Right = 'Center' }
@@ -463,12 +490,13 @@ local function SendState()
         selected = menuIndex - 1, -- NUI 用 0 基索引高亮 / NUI uses a 0-based highlight index
         values = {
             radioEnabled and '开启' or '关闭',                      -- 0 电台开关
-            VolumePercent() .. '%',                                 -- 1 音量
-            settings.NormalizeVolume and '开' or '关',              -- 2 音量均衡
-            PositionNames[settings.MenuPosition],                   -- 3 菜单位置
-            '回车',                                                 -- 4 测试播放
-            '回车',                                                 -- 5 重置设置
-            '回车',                                                 -- 6 保存并关闭
+            settings.AutoStart and '开启' or '关闭',                -- 1 自启动
+            VolumePercent() .. '%',                                 -- 2 音量
+            settings.NormalizeVolume and '开' or '关',              -- 3 音量均衡
+            PositionNames[settings.MenuPosition],                   -- 4 菜单位置
+            '回车',                                                 -- 5 测试播放
+            '回车',                                                 -- 6 重置设置
+            '回车',                                                 -- 7 保存并关闭
         },
     })
 end
@@ -479,7 +507,6 @@ local function CloseMenu()
     Dbg('menu closed (settings saved)')
     -- 不再调用 SetNuiFocus：鼠标与游戏输入全程不被捕获，玩家可自由移动
     -- No SetNuiFocus at all: mouse & game input are never captured, the player can keep moving
-    settings.Enabled = radioEnabled
     SaveSettings()
     Notify('~g~SETTINGS SAVED~s~ Radio is ' .. (radioEnabled and 'ONLINE' or 'OFFLINE') .. ' • Volume ' .. VolumePercent() .. '%')
     SendNUIMessage({ type = 'close' })
@@ -497,9 +524,9 @@ end
 -- 确认激活当前选中项（原版 ActivateMenuItem）/ activate the selected item (mirrors ActivateMenuItem)
 local function ActivateMenuItem()
     local index = menuIndex - 1 -- 转为 0 基菜单项号 / convert to 0-based item index
-    if index <= 3 then
+    if index <= 4 then
         AdjustSetting(index, 1)
-    elseif index == 4 then
+    elseif index == 5 then
         -- 测试播放（本地自听，不参与全服同步）/ local test play, not synced
         local entry = SelectClip()
         if entry then
@@ -529,26 +556,25 @@ local function ActivateMenuItem()
             Dbg('menu: TEST PLAY failed, manifest empty')
             Notify('~r~AUDIO ERROR~s~ No WAV files found.')
         end
-    elseif index == 5 then
+    elseif index == 6 then
         -- 恢复出厂默认并立即保存（与单项修改行为一致）
         -- Restore defaults and persist immediately (same behavior as single-item edits)
         settings = {
-            Enabled         = Config.Defaults.Enabled,
+            AutoStart       = Config.Defaults.AutoStart,
             Notifications   = Config.Defaults.Notifications,
             Volume          = Config.Defaults.Volume,
             NormalizeVolume = Config.Defaults.NormalizeVolume,
             MenuPosition    = Config.Defaults.MenuPosition,
         }
-        radioEnabled = settings.Enabled
-        Dbg('menu: RESET to defaults (enabled=' .. tostring(radioEnabled) .. ')')
+        radioEnabled = settings.AutoStart
+        Dbg('menu: RESET to defaults (radioEnabled=' .. tostring(radioEnabled) .. ')')
         -- 重置只静音/恢复自己的声源，不销毁会话 / reset only mutes/unmutes our own emitter
         SendNUIMessage({ type = 'volume', volume = radioEnabled and settings.Volume or 0 })
-        settings.Enabled = radioEnabled
         SaveSettings()
         ReportVolume()
         SendNUIMessage({ type = 'position', position = settings.MenuPosition })
         Notify('~y~SETTINGS RESET~s~ Release defaults restored.')
-    elseif index == 6 then
+    elseif index == 7 then
         CloseMenu()
     end
     SendState()
@@ -675,8 +701,10 @@ CreateThread(function()
     -- 同步调试开关给 NUI（关 = NUI 不往玩家 F8 打日志）/ sync the debug switch to the NUI (off = no NUI logs in the player's F8)
     SendNUIMessage({ type = 'debugMode', enabled = DBG })
     settings = LoadSettings()
-    radioEnabled = settings.Enabled -- 恢复上次保存的开关状态 / restore the saved switch state
-    Dbg('startup: manifest=' .. #AudioFiles .. ' clips, radioEnabled=' .. tostring(radioEnabled))
+    -- 进服初始开关 = 自启动设置（持久化，重连不丢失）/ initial state = AutoStart (persisted across relogs)
+    radioEnabled = settings.AutoStart
+    Dbg('startup: manifest=' .. #AudioFiles .. ' clips, autoStart=' .. tostring(settings.AutoStart)
+        .. ', radioEnabled=' .. tostring(radioEnabled))
     ReportVolume()                  -- 上报声源响度 / report emission volume
     -- 先做一次时钟校准再提示就绪 / calibrate once before announcing readiness
     RequestClockSync()
