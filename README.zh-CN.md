@@ -11,7 +11,7 @@
 [![Audio License](https://img.shields.io/badge/audio%20license-CC%20BY%203.0%20US-lightgrey?logo=creativecommons&logoColor=black)](#-致谢)
 [![Version](https://img.shields.io/badge/version-1.1.0-yellow)](https://github.com/TEARLESSVVOID/FiveM-background_radio_chatter/releases)
 
-[English](README.md) | **简体中文**
+[English](README.md) | **简体中文** | [📋 发行说明](RELEASE_NOTES.md)
 
 </div>
 
@@ -223,6 +223,6 @@
 
 <div align="center">
 
-[English](README.md) | **简体中文**
+[English](README.md) | **简体中文** | [📋 发行说明](RELEASE_NOTES.md)
 
 </div>

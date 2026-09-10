@@ -11,7 +11,7 @@
 [![Audio License](https://img.shields.io/badge/audio%20license-CC%20BY%203.0%20US-lightgrey?logo=creativecommons&logoColor=black)](#-credits)
 [![Version](https://img.shields.io/badge/version-1.1.0-yellow)](https://github.com/TEARLESSVVOID/FiveM-background_radio_chatter/releases)
 
-**English** | [简体中文](README.zh-CN.md)
+**English** | [简体中文](README.zh-CN.md) | [📋 Release Notes](RELEASE_NOTES.md)
 
 </div>
 
@@ -223,6 +223,6 @@ Enable `Config.Debug = true` in [config.lua](config.lua) to stream verbose logs 
 
 <div align="center">
 
-**English** | [简体中文](README.zh-CN.md)
+**English** | [简体中文](README.zh-CN.md) | [📋 Release Notes](RELEASE_NOTES.md)
 
 </div>
