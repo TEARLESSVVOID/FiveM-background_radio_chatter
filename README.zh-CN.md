@@ -4,11 +4,12 @@
 
 **FiveM 沉浸式 3D 空间警用电台环境音 —— 由 LSPDFR 插件移植而来**
 
-[![FiveM](https://img.shields.io/badge/platform-FiveM-blue)](https://fivem.net)
-[![GTA V](https://img.shields.io/badge/game-GTA%20V-orange)](https://www.rockstargames.com/V/)
-[![LSPDFR 移植](https://img.shields.io/badge/ported%20from-LSPDFR%20v1.2.1-9cf)](https://www.lcpdfr.com/)
-[![License](https://img.shields.io/badge/license-MIT-green)](#-开源许可)
-[![Version](https://img.shields.io/badge/version-1.0.0-yellow)]()
+[![FiveM](https://img.shields.io/badge/platform-FiveM-blue?logo=fivem&logoColor=white)](https://fivem.net)
+[![GTA V](https://img.shields.io/badge/game-GTA%20V-orange?logo=rockstargames&logoColor=white)](https://www.rockstargames.com/V/)
+[![LSPDFR 移植](https://img.shields.io/badge/ported%20from-LSPDFR%20Plugin-9cf)](https://www.lcpdfr.com/downloads/gta5mods/scripts/55334-background-radio-chatter/)
+[![License](https://img.shields.io/badge/code%20license-MIT-green?logo=opensourceinitiative&logoColor=white)](LICENSE)
+[![Audio License](https://img.shields.io/badge/audio%20license-CC%20BY%203.0%20US-lightgrey?logo=creativecommons&logoColor=black)](#-致谢)
+[![Version](https://img.shields.io/badge/version-1.0.0-yellow)](https://github.com/TEARLESSVVOID/FiveM-background_radio_chatter/releases)
 
 [English](README.md) | **简体中文**
 
@@ -20,7 +21,7 @@
 
 **Background Radio Chatter** 为你的 FiveM 角色扮演服务器带来真实的警用电台环境音。每位玩家都是一个"活的电台声源"——播报真实的调度杂谈，附近玩家可以在 **3D 空间中真切听到**，并带有真实的距离衰减与空气吸声效果。
 
-本资源是对 LSPDFR 知名插件 *Background Radio Chatter v1.2.1* 的**逆向移植版**，以 Lua + NUI（Web Audio API）从零重建为原生 FiveM 资源。
+本资源是对 LSPDFR 插件 [*Background Radio Chatter*（作者 DDvy.david）](https://www.lcpdfr.com/downloads/gta5mods/scripts/55334-background-radio-chatter/) 的**逆向移植版**，以 Lua + NUI（Web Audio API）从零重建为原生 FiveM 资源。
 
 <div align="center">
 
@@ -205,7 +206,9 @@
 
 ## 🙏 致谢
 
-- **[LSPDFR](https://www.lcpdfr.com/) 与原版 *Background Radio Chatter* 插件** —— 本资源是 v1.2.1 的逆向移植版；全部电台杂谈音频版权归原插件所有
+- **[DDvy.david](https://www.lcpdfr.com/profile/680020-ddvydavid/)** —— 原版 LSPDFR 插件 [*Background Radio Chatter*](https://www.lcpdfr.com/downloads/gta5mods/scripts/55334-background-radio-chatter/) 的作者；本资源是对其作品的逆向移植
+- **[Broadcastify](https://www.broadcastify.com/)** —— 电台杂谈音频来源，由原插件剪辑收录，授权协议为 **CC BY 3.0 US**
+- **[LCPDFR](https://www.lcpdfr.com/)** —— 原插件的发布平台
 - **FiveM / Cfx.re** —— 本移植版的目标平台
 - 基于 Lua 5.4 与 NUI Web Audio API 构建
 
@@ -213,7 +216,8 @@
 
 ## 📄 开源许可
 
-基于 [MIT License](LICENSE) 发布。内置电台杂谈音频源自 LSPDFR 插件——二次分发请遵守原作者的条款。
+- **代码：** 基于 [MIT License](LICENSE) 发布
+- **内置电台杂谈音频：** 源自原版 LSPDFR 插件——录音由 [Broadcastify](https://www.broadcastify.com/) 提供，授权协议为 **CC BY 3.0 US**。二次分发时必须注明出处。
 
 <div align="center">
 

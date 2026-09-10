@@ -4,11 +4,12 @@
 
 **Immersive 3D spatial police radio chatter for FiveM — ported from the LSPDFR plugin**
 
-[![FiveM](https://img.shields.io/badge/platform-FiveM-blue)](https://fivem.net)
-[![GTA V](https://img.shields.io/badge/game-GTA%20V-orange)](https://www.rockstargames.com/V/)
-[![LSPDFR Port](https://img.shields.io/badge/ported%20from-LSPDFR%20v1.2.1-9cf)](https://www.lcpdfr.com/)
-[![License](https://img.shields.io/badge/license-MIT-green)](#-license)
-[![Version](https://img.shields.io/badge/version-1.0.0-yellow)]()
+[![FiveM](https://img.shields.io/badge/platform-FiveM-blue?logo=fivem&logoColor=white)](https://fivem.net)
+[![GTA V](https://img.shields.io/badge/game-GTA%20V-orange?logo=rockstargames&logoColor=white)](https://www.rockstargames.com/V/)
+[![LSPDFR Port](https://img.shields.io/badge/ported%20from-LSPDFR%20Plugin-9cf)](https://www.lcpdfr.com/downloads/gta5mods/scripts/55334-background-radio-chatter/)
+[![License](https://img.shields.io/badge/code%20license-MIT-green?logo=opensourceinitiative&logoColor=white)](LICENSE)
+[![Audio License](https://img.shields.io/badge/audio%20license-CC%20BY%203.0%20US-lightgrey?logo=creativecommons&logoColor=black)](#-credits)
+[![Version](https://img.shields.io/badge/version-1.0.0-yellow)](https://github.com/TEARLESSVVOID/FiveM-background_radio_chatter/releases)
 
 **English** | [简体中文](README.zh-CN.md)
 
@@ -20,7 +21,7 @@
 
 **Background Radio Chatter** brings ambient police radio transmissions to your FiveM roleplay server. Every player carries a live radio emitter — broadcasting authentic dispatch chatter that nearby players can *actually hear in 3D space*, with realistic distance falloff and air absorption.
 
-This resource is a **faithful reverse-engineered port** of the popular [LSPDFR](https://www.lcpdfr.com/) plugin *Background Radio Chatter v1.2.1*, rebuilt from the ground up as a native FiveM resource with Lua + NUI (Web Audio API).
+This resource is a **faithful reverse-engineered port** of the LSPDFR plugin [*Background Radio Chatter* by DDvy.david](https://www.lcpdfr.com/downloads/gta5mods/scripts/55334-background-radio-chatter/), rebuilt from the ground up as a native FiveM resource with Lua + NUI (Web Audio API).
 
 <div align="center">
 
@@ -205,7 +206,9 @@ Enable `Config.Debug = true` in [config.lua](config.lua) to stream verbose logs 
 
 ## 🙏 Credits
 
-- **[LSPDFR](https://www.lcpdfr.com/) & the original *Background Radio Chatter* plugin** — this resource is a reverse-engineered port of v1.2.1; all radio chatter audio belongs to the original plugin
+- **[DDvy.david](https://www.lcpdfr.com/profile/680020-ddvydavid/)** — author of the original LSPDFR plugin [*Background Radio Chatter*](https://www.lcpdfr.com/downloads/gta5mods/scripts/55334-background-radio-chatter/); this resource is a reverse-engineered port of his work
+- **[Broadcastify](https://www.broadcastify.com/)** — source of the radio chatter audio, edited & bundled with the original plugin, licensed under **CC BY 3.0 US**
+- **[LCPDFR](https://www.lcpdfr.com/)** — the home platform of the original plugin
 - **FiveM / Cfx.re** — the platform this port targets
 - Built with Lua 5.4 and the NUI Web Audio API
 
@@ -213,7 +216,8 @@ Enable `Config.Debug = true` in [config.lua](config.lua) to stream verbose logs 
 
 ## 📄 License
 
-Released under the [MIT License](LICENSE). The bundled radio chatter audio originates from the LSPDFR plugin — respect the original author's terms when redistributing.
+- **Code:** released under the [MIT License](LICENSE)
+- **Bundled radio chatter audio:** originates from the original LSPDFR plugin — recordings provided by [Broadcastify](https://www.broadcastify.com/), licensed under **CC BY 3.0 US**. You must give appropriate credit when redistributing.
 
 <div align="center">
 
