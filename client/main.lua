@@ -126,6 +126,12 @@ local function LoadSettings()
     return merged
 end
 
+-- 顶层立即加载：脚本加载阶段就初始化 settings，
+-- 防止早到的 brc:transmission 等网络事件访问 nil（修复 "attempt to index a nil value (upvalue 'settings')" 崩溃）
+-- Load eagerly at top level: settings is initialized during script load,
+-- so early net events (e.g. brc:transmission) can never hit a nil settings.
+settings = LoadSettings()
+
 -- 保存到客户端 KVP（对应 RadioSettings.Save）/ persist to client KVP (mirrors RadioSettings.Save)
 -- 自启动是持久化偏好；本次会话的开关状态（radioEnabled）不写入，避免"临时关台"被记住
 -- AutoStart is the persisted preference; the session toggle (radioEnabled) is NOT saved,
@@ -700,7 +706,7 @@ math.randomseed(GetGameTimer())
 CreateThread(function()
     -- 同步调试开关给 NUI（关 = NUI 不往玩家 F8 打日志）/ sync the debug switch to the NUI (off = no NUI logs in the player's F8)
     SendNUIMessage({ type = 'debugMode', enabled = DBG })
-    settings = LoadSettings()
+    -- settings 已在顶层加载（见 LoadSettings 定义后）/ settings already loaded at top level
     -- 进服初始开关 = 自启动设置（持久化，重连不丢失）/ initial state = AutoStart (persisted across relogs)
     radioEnabled = settings.AutoStart
     Dbg('startup: manifest=' .. #AudioFiles .. ' clips, autoStart=' .. tostring(settings.AutoStart)
